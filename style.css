@@ -17,7 +17,7 @@ body.theme-orange { --primary: #ff9d00; --bg-color: #0a0500; --bg-grid: #1a1000;
 
 body { margin: 0; height: 100vh; background-color: var(--bg-color); color: var(--text-main); font-family: var(--font-ui); overflow: hidden; transition: background-color 0.5s; }
 
-/* Visualizer */
+/* Visualizer & BG */
 #audioVisualizer { position: fixed; bottom: 0; left: 0; width: 100%; height: 250px; z-index: -1; opacity: 0.4; pointer-events: none; }
 .grid-bg { position: absolute; inset: 0; z-index: -2; background-image: linear-gradient(var(--bg-grid) 1px, transparent 1px), linear-gradient(90deg, var(--bg-grid) 1px, transparent 1px); background-size: 40px 40px; opacity: 0.3; }
 .vignette { position: absolute; inset: 0; background: radial-gradient(circle at center, transparent 0%, #000 90%); z-index: -1; pointer-events: none; }
@@ -25,14 +25,11 @@ body { margin: 0; height: 100vh; background-color: var(--bg-color); color: var(-
 /* Layout */
 .app-layout { display: grid; grid-template-columns: 1fr 380px; height: 100vh; width: 100vw; }
 
-/* Header & Spotify */
+/* Header */
 .top-nav { position: absolute; top: 0; left: 0; right: 0; padding: 20px 30px; display: flex; justify-content: space-between; align-items: center; z-index: 10; }
 .brand-area { display: flex; align-items: center; gap: 20px; flex: 1; }
 .brand { font-family: var(--font-tech); font-weight: 700; letter-spacing: -1px; display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
 .brand-icon { color: var(--primary); text-shadow: 0 0 10px var(--primary); }
-
-.spotify-embed-container { width: 100%; max-width: 350px; height: 80px; margin-left: 20px; z-index: 20; transition: opacity 0.3s; }
-.spotify-embed-container:hover { opacity: 1; }
 
 .nav-controls { display: flex; gap: 8px; }
 .nav-btn { background: transparent; border: 1px solid var(--border); color: var(--text-muted); min-width: 40px; height: 40px; border-radius: 8px; cursor: pointer; transition: 0.2s; display: flex; align-items: center; justify-content: center; }
@@ -44,18 +41,14 @@ body { margin: 0; height: 100vh; background-color: var(--bg-color); color: var(-
 .timer-wrapper { position: relative; width: 300px; height: 300px; margin: 0 auto; display: flex; align-items: center; justify-content: center; }
 .progress-ring { position: absolute; top: 0; left: 0; transform: rotate(-90deg); }
 .progress-ring__circle { transition: stroke-dashoffset 1s linear; transform-origin: 50% 50%; }
-
 #timerDisplay { font-family: var(--font-tech); font-size: 4.5rem; margin: 0; line-height: 1; font-variant-numeric: tabular-nums; letter-spacing: -2px; z-index: 2; text-shadow: 0 0 30px rgba(0,0,0,0.8); }
 .status-pill { display: inline-block; background: var(--primary-dim); color: var(--primary); padding: 6px 16px; border-radius: 20px; font-size: 11px; font-weight: 700; letter-spacing: 2px; margin-bottom: 20px; font-family: var(--font-tech); border: 1px solid rgba(0, 210, 141, 0.2); }
-
 .controls-wrapper { display: flex; align-items: center; justify-content: center; gap: 15px; margin-top: 30px; margin-bottom: 40px; }
 .btn-primary { background: var(--primary); color: #000; border: none; padding: 15px 40px; font-family: var(--font-tech); font-weight: 700; font-size: 16px; border-radius: 6px; cursor: pointer; box-shadow: 0 0 25px var(--primary-dim); transition: 0.2s; }
 .btn-primary:active { transform: scale(0.96); }
 .btn-secondary { background: transparent; border: 1px solid var(--border); color: var(--text-main); width: 45px; height: 45px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 18px; }
 .btn-secondary:hover { border-color: var(--primary); color: var(--primary); }
 .hotkeys-hint { margin-top: 40px; font-family: var(--font-tech); font-size: 10px; color: var(--text-muted); opacity: 0.5; }
-
-/* Cycle Dots */
 .cycle-tracker { display: flex; align-items: center; gap: 30px; position: relative; justify-content: center; }
 .cycle-line { position: absolute; height: 2px; width: 100%; background: #222; z-index: -1; }
 .cycle-step { width: 20px; height: 20px; background: #111; border: 2px solid #333; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 10px; color: #555; font-family: var(--font-tech); }
@@ -65,14 +58,12 @@ body { margin: 0; height: 100vh; background-color: var(--bg-color); color: var(-
 .region-sidebar { background: var(--glass-panel); backdrop-filter: blur(25px); border-left: 1px solid var(--border); display: flex; flex-direction: column; padding: 25px; z-index: 100; }
 .sidebar-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
 .sidebar-header h2 { font-size: 16px; font-weight: 600; margin: 0; }
-
 .input-group { display: flex; gap: 8px; margin-bottom: 20px; }
 .input-group input[type="text"] { flex: 1; background: rgba(0,0,0,0.3); border: 1px solid var(--border); padding: 10px; border-radius: 6px; color: #fff; outline: none; }
 .input-group input[type="number"] { width: 50px; background: rgba(0,0,0,0.3); border: 1px solid var(--border); padding: 10px; border-radius: 6px; color: #fff; text-align: center; }
 .input-group input:focus { border-color: var(--primary); }
 .input-group button { background: var(--border); color: #fff; border: none; width: 40px; border-radius: 6px; cursor: pointer; }
 .input-group button:hover { background: var(--primary); color: #000; }
-
 .task-list { list-style: none; padding: 0; margin: 0; }
 .task-item { background: rgba(255,255,255,0.03); padding: 10px; border-radius: 6px; margin-bottom: 6px; display: flex; gap: 10px; align-items: center; cursor: pointer; font-size: 14px; transition: 0.2s; }
 .task-item:active { transform: scale(0.98); }
@@ -89,7 +80,7 @@ body { margin: 0; height: 100vh; background-color: var(--bg-color); color: var(-
 .toast-container.show { transform: translateX(-50%) translateY(0); opacity: 1; }
 .toast-icon { color: var(--primary); }
 
-/* Modal & Inputs Grid */
+/* Modal */
 .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.8); display: none; place-items: center; z-index: 200; backdrop-filter: blur(5px); }
 .modal-overlay.open { display: grid; }
 .modal-box { background: #111; border: 1px solid #333; padding: 30px; border-radius: 12px; width: 90%; max-width: 350px; }
@@ -98,9 +89,8 @@ body { margin: 0; height: 100vh; background-color: var(--bg-color); color: var(-
 .input-row-group { display: flex; gap: 10px; }
 .input-col { flex: 1; }
 .input-col label { display: block; font-size: 11px; color: #666; margin-bottom: 5px; }
-.input-col input, .input-row input { width: 100%; padding: 10px; background: #000; border: 1px solid #333; color: white; box-sizing: border-box; border-radius: 6px; }
-.input-row input:focus, .input-col input:focus { border-color: var(--primary); outline: none; }
-
+.input-col input { width: 100%; padding: 10px; background: #000; border: 1px solid #333; color: white; box-sizing: border-box; border-radius: 6px; }
+.input-col input:focus { border-color: var(--primary); outline: none; }
 .modal-actions { display: flex; gap: 10px; margin-top: 30px; }
 .btn-confirm { flex: 1; background: var(--primary); padding: 12px; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; }
 .btn-cancel { flex: 1; background: transparent; border: 1px solid #333; color: white; border-radius: 6px; cursor: pointer; }
@@ -111,7 +101,6 @@ body { margin: 0; height: 100vh; background-color: var(--bg-color); color: var(-
 .mobile-drag-handle { display: none; }
 @media (max-width: 800px) {
     .app-layout { display: block; }
-    .spotify-embed-container { display: none; } /* Esconde spotify no mobile */
     .mobile-task-toggle { display: block; position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); background: rgba(20,20,20,0.9); border: 1px solid var(--primary); color: #fff; padding: 12px 24px; border-radius: 30px; backdrop-filter: blur(10px); z-index: 50; }
     .region-sidebar { position: fixed; bottom: 0; left: 0; right: 0; height: 75vh; border-left: none; border-top: 1px solid var(--border); border-radius: 20px 20px 0 0; transform: translateY(110%); box-shadow: 0 -10px 40px rgba(0,0,0,0.8); }
     .region-sidebar.open { transform: translateY(0); }
