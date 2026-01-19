@@ -1,14 +1,8 @@
-/* --- BYTESTACK STATION v5.0 (SPOTIFY EDITION) --- */
+/* --- BYTESTACK FLOW v6.0 (CLEAN) --- */
 
 // --- 1. STATE & STORAGE ---
 const savedSettings = JSON.parse(localStorage.getItem('byteStack_settings'));
-// URL Padrão: Lofi Girl Playlist
-const defaultSpotify = "https://open.spotify.com/embed/playlist/0vvXsWCC9xrXsKd4FyS8kM";
-
-let settings = savedSettings || { 
-    focus: 25, short: 5, long: 15,
-    spotifyUrl: defaultSpotify 
-};
+let settings = savedSettings || { focus: 25, short: 5, long: 15 };
 
 const savedStats = JSON.parse(localStorage.getItem('byteStack_stats'));
 let stats = savedStats || { totalMinutes: 0, cycle: 1 };
@@ -33,9 +27,8 @@ const taskEst = document.getElementById('taskEst');
 const taskList = document.getElementById('taskList');
 const toastEl = document.getElementById('toast');
 const toastMsg = document.getElementById('toastMsg');
-const spotifyFrame = document.getElementById('spotifyFrame');
 
-// --- 3. INIT & THEME ---
+// --- 3. THEME SYSTEM ---
 function loadTheme() {
     const savedTheme = localStorage.getItem('byteStack_theme');
     if (savedTheme) document.body.className = savedTheme;
@@ -49,16 +42,6 @@ function toggleTheme() {
     body.className = newTheme;
     localStorage.setItem('byteStack_theme', newTheme);
     showToast(`Tema: ${msg}`); playClickSound();
-}
-
-// Carregar Spotify
-function initSpotify() {
-    if(settings.spotifyUrl) {
-        spotifyFrame.src = settings.spotifyUrl;
-        document.getElementById('inputSpotify').value = settings.spotifyUrl.replace('/embed', ''); // Mostra link limpo no input
-    } else {
-        spotifyFrame.src = defaultSpotify;
-    }
 }
 
 // --- 4. AUDIO SYSTEM & VISUALIZER ---
@@ -86,8 +69,11 @@ function createNoise(type) {
         else { data[i] = white * 0.5; }
     }
     const noise = audioCtx.createBufferSource(); noise.buffer = buffer; noise.loop = true;
+    
+    // Connect to Visualizer
     analyser = audioCtx.createAnalyser(); analyser.fftSize = 128;
     const gain = audioCtx.createGain(); gain.gain.value = 0.05;
+    
     noise.connect(gain); gain.connect(analyser); gain.connect(audioCtx.destination);
     noise.start(); currentOscillators.push(noise); drawVisualizer();
 }
@@ -115,7 +101,7 @@ function cycleAudio() {
     if (audioMode === 1) createNoise('brown');
     if (audioMode === 2) createNoise('pink');
     if (audioMode === 3) createNoise('white');
-    showToast(`Gerador: ${modesText[audioMode].replace('🔇 ','').replace('🤎 ','').replace('🌧️ ','').replace('🌊 ','')}`);
+    showToast(`Som: ${modesText[audioMode].replace('🔇 ','').replace('🤎 ','').replace('🌧️ ','').replace('🌊 ','')}`);
 }
 
 // --- 5. TIMER LOGIC ---
@@ -170,9 +156,7 @@ function addTask() {
     const li = document.createElement('li'); li.className = 'task-item';
     li.innerHTML = `<div class="check-box"></div><span style="flex:1">${text}</span><span class="estimates">${dots}</span>`;
     li.onclick = function(e) {
-        if(e.target.className === 'tomato-dot') {
-            e.target.textContent = e.target.textContent === '○' ? '●' : '○'; e.target.classList.toggle('dot-full'); saveAllData(); return;
-        }
+        if(e.target.className === 'tomato-dot') { e.target.textContent = e.target.textContent === '○' ? '●' : '○'; e.target.classList.toggle('dot-full'); saveAllData(); return; }
         playClickSound(); this.classList.toggle('done'); updateTaskCount(); saveAllData();
     };
     taskList.prepend(li); taskInput.value = ''; updateTaskCount(); saveAllData();
@@ -212,29 +196,9 @@ function showToast(msg) { toastMsg.textContent=msg; toastEl.classList.add('show'
 function updateTaskCount(){ const c=document.querySelectorAll('.task-item:not(.done)').length; document.getElementById('mobileTaskCount').textContent=c; }
 function updateCycleDots(){ for(let i=1;i<=4;i++){ document.getElementById(`step${i}`).classList.toggle('active', i===state.cycle); }}
 function toggleSettings(){ playClickSound(); document.getElementById('settingsModal').classList.toggle('open'); }
+function saveSettings(){ settings.focus=parseInt(document.getElementById('inputFocus').value); settings.short=parseInt(document.getElementById('inputShort').value); settings.long=parseInt(document.getElementById('inputLong').value); saveAllData(); toggleSettings(); resetTimer(); showToast("Salvo"); }
 function skipPhase(){ playClickSound(); state.timeLeft=0; finishCycle(); }
 function toggleMobileSidebar(){ playClickSound(); elSidebar.classList.toggle('open'); }
-
-// SALVAR CONFIGURAÇÕES (INCLUINDO SPOTIFY)
-function saveSettings(){
-    settings.focus = parseInt(document.getElementById('inputFocus').value);
-    settings.short = parseInt(document.getElementById('inputShort').value);
-    settings.long = parseInt(document.getElementById('inputLong').value);
-    
-    // Tratamento de URL do Spotify
-    let rawUrl = document.getElementById('inputSpotify').value.trim();
-    if(rawUrl) {
-        if(!rawUrl.includes('/embed') && rawUrl.includes('open.spotify.com')) {
-            // Converte link normal para embed
-            rawUrl = rawUrl.replace('open.spotify.com/', 'open.spotify.com/embed/');
-        }
-        settings.spotifyUrl = rawUrl;
-        initSpotify(); // Atualiza iframe
-    }
-
-    saveAllData(); toggleSettings(); resetTimer(); showToast("Config Salva");
-}
-
 async function togglePiP() {
     playClickSound();
     if(document.pictureInPictureElement) document.exitPictureInPicture();
@@ -259,6 +223,5 @@ document.addEventListener('keydown', (e) => {
 // Init
 loadTheme();
 loadTasks();
-initSpotify();
 document.getElementById('sessionMinutes').textContent = stats.totalMinutes;
 updateTimerUI();
