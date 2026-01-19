@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ByteStack Station</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@200;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <canvas id="audioVisualizer"></canvas>
+    <div class="grid-bg"></div>
+    <div class="vignette"></div>
+
+    <div class="app-layout">
+        
+        <main class="region-focus">
+            <header class="top-nav">
+                <div class="brand-area">
+                    <div class="brand"><span class="brand-icon">⚡</span> BYTESTACK</div>
+                    
+                    <div class="spotify-embed-container">
+                        <iframe id="spotifyFrame" style="border-radius:12px" src="" width="100%" height="80" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+                    </div>
+                </div>
+
+                <div class="nav-controls">
+                    <button class="nav-btn" onclick="toggleTheme()" title="Mudar Tema [T]">🎨</button>
+                    <button class="nav-btn" onclick="cycleAudio()" id="audioBtn" title="Gerador de Ruído [S]">🔇</button>
+                    <button class="nav-btn" onclick="togglePiP()" id="pipBtn" title="Mini Player [P]">⏍</button>
+                    <button class="nav-btn" onclick="toggleSettings()" title="Configurações">⚙</button>
+                </div>
+            </header>
+
+            <div class="timer-container">
+                <div class="status-pill" id="statusText">RUMO AO FOCO</div>
+                
+                <div class="timer-wrapper">
+                    <svg class="progress-ring" width="300" height="300">
+                        <circle class="progress-ring__circle-bg" stroke="rgba(255,255,255,0.05)" stroke-width="8" fill="transparent" r="140" cx="150" cy="150"/>
+                        <circle class="progress-ring__circle" id="progressCircle" stroke="#00d28d" stroke-width="8" fill="transparent" r="140" cx="150" cy="150"/>
+                    </svg>
+                    <h1 id="timerDisplay">25:00</h1>
+                </div>
+
+                <div class="controls-wrapper">
+                    <button class="btn-secondary" onclick="resetTimer()" title="Reset [R]">↺</button>
+                    <button class="btn-primary" id="playBtn" onclick="toggleTimer()" title="Play [Space]">INICIAR</button>
+                    <button class="btn-secondary" onclick="skipPhase()" title="Skip"> → </button>
+                </div>
+
+                <div class="cycle-tracker">
+                    <div class="cycle-line"></div>
+                    <div class="cycle-step active" id="step1">1</div>
+                    <div class="cycle-step" id="step2">2</div>
+                    <div class="cycle-step" id="step3">3</div>
+                    <div class="cycle-step" id="step4">4</div>
+                </div>
+            </div>
+
+            <div class="hotkeys-hint">
+                [Espaço] Play • [P] PiP • [S] Sons • [T] Tema • [N] Task
+            </div>
+
+            <button class="mobile-task-toggle" onclick="toggleMobileSidebar()">
+                📝 Tarefas (<span id="mobileTaskCount">0</span>)
+            </button>
+        </main>
+
+        <aside class="region-sidebar" id="sidebar">
+            <div class="mobile-drag-handle" onclick="toggleMobileSidebar()"></div>
+            <div class="sidebar-header">
+                <h2>Backlog</h2>
+                <button class="close-sidebar-mobile" onclick="toggleMobileSidebar()">✕</button>
+            </div>
+            <div class="input-group">
+                <input type="text" id="taskInput" placeholder="Nova tarefa... [N]" autocomplete="off">
+                <input type="number" id="taskEst" min="1" max="5" value="1" title="Estimativa de Ciclos">
+                <button onclick="addTask()">＋</button>
+            </div>
+            <div class="task-scroll-area">
+                <ul class="task-list" id="taskList"></ul>
+            </div>
+            <div class="sidebar-footer">
+                <small>Foco Total: <span id="sessionMinutes">0</span> min</small>
+            </div>
+        </aside>
+
+    </div>
+
+    <div id="toast" class="toast-container"><span class="toast-icon">⚡</span> <span id="toastMsg">Info</span></div>
+
+    <div class="modal-overlay" id="settingsModal">
+        <div class="modal-box">
+            <h3>Configurações</h3>
+            
+            <div class="setting-section-title">⏱️ Tempos (minutos)</div>
+            <div class="input-row-group">
+                <div class="input-col"><label>Foco</label><input type="number" id="inputFocus" value="25"></div>
+                <div class="input-col"><label>Curta</label><input type="number" id="inputShort" value="5"></div>
+                <div class="input-col"><label>Longa</label><input type="number" id="inputLong" value="15"></div>
+            </div>
+
+            <div class="setting-section-title">🎵 Spotify Link</div>
+            <div class="input-row">
+                <input type="text" id="inputSpotify" placeholder="Cole o link da Playlist/Album aqui..." style="width: 100%;">
+                <small style="color:#666; font-size:10px; display:block; margin-top:5px;">Ex: https://open.spotify.com/playlist/...</small>
+            </div>
+
+            <div class="modal-actions">
+                <button class="btn-cancel" onclick="toggleSettings()">Cancelar</button>
+                <button class="btn-confirm" onclick="saveSettings()">Salvar & Aplicar</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
